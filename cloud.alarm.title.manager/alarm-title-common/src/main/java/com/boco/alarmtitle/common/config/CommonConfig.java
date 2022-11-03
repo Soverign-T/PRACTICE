@@ -1,8 +1,9 @@
 package com.boco.alarmtitle.common.config;
 
-import com.boco.alarmtitle.common.dao.Impl.UserDaoImpl;
+import com.boco.alarmtitle.common.cache.DispMessageEntityCache;
+import com.boco.alarmtitle.common.dao.Impl.MessageDaoImpl;
 import com.boco.alarmtitle.common.dao.JdbcTemplateImpl;
-import com.boco.alarmtitle.common.dao.UserDao;
+import com.boco.alarmtitle.common.dao.MessageDao;
 import com.boco.component.datasource.druid.DruidDataSourceDelegate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,8 +61,8 @@ public class CommonConfig {
 	}
 
 	@Bean(name = "userImpl")
-	public UserDao userImpl(@Qualifier("jdbcTemplateImpl") JdbcTemplateImpl jdbcTemplate) {
-		UserDaoImpl userImpl = new UserDaoImpl();
+	public MessageDao userImpl(@Qualifier("jdbcTemplateImpl") JdbcTemplateImpl jdbcTemplate) {
+		MessageDaoImpl userImpl = new MessageDaoImpl();
 		userImpl.setJdbcTemplate(jdbcTemplate);
 		return userImpl;
 	}
