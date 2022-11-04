@@ -5,8 +5,6 @@ import com.boco.alarmtitle.common.dao.Impl.MessageDaoImpl;
 import com.boco.alarmtitle.common.dao.JdbcTemplateImpl;
 import com.boco.alarmtitle.common.dao.MessageDao;
 import com.boco.component.datasource.druid.DruidDataSourceDelegate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -24,14 +22,13 @@ import java.sql.SQLException;
 @EnableConfigurationProperties
 public class CommonConfig {
 
-	private static Logger logger = LoggerFactory.getLogger(CommonConfig.class);
+	//private static Logger logger = LoggerFactory.getLogger(CommonConfig.class);
 	@Autowired
 	private DatabaseProperties databaseProperties;
 
-
 	@Bean(name = "dataSource")
 	public DataSource dataSource() throws SQLException {
-		logger.debug("数据库连接信息:{}", databaseProperties);
+		//logger.debug("数据库连接信息:{}", databaseProperties);
 		DruidDataSourceDelegate dataSource = new DruidDataSourceDelegate();
 		dataSource.setName(databaseProperties.getAlias());
 		dataSource.setUrl(databaseProperties.getDriverUrl());
@@ -55,18 +52,17 @@ public class CommonConfig {
 
 	@Bean(name = "jdbcTemplateImpl")
 	public JdbcTemplateImpl jdbcTemplate(DataSource dataSource) {
-		JdbcTemplateImpl jdbcTemplate = new JdbcTemplateImpl(dataSource);
-		// jdbcTemplate.setDataSource(dataSource);
-		return jdbcTemplate;
+		return new JdbcTemplateImpl(dataSource);
 	}
 
-	@Bean(name = "userImpl")
-	public MessageDao userImpl(@Qualifier("jdbcTemplateImpl") JdbcTemplateImpl jdbcTemplate) {
-		MessageDaoImpl userImpl = new MessageDaoImpl();
-		userImpl.setJdbcTemplate(jdbcTemplate);
-		return userImpl;
+	@Bean(name = "messageDaoImpl")
+	public MessageDao messageDaoImpl(@Qualifier("jdbcTemplateImpl") JdbcTemplateImpl jdbcTemplate) {
+		MessageDaoImpl messageDao = new MessageDaoImpl();
+		messageDao.setJdbcTemplate(jdbcTemplate);
+		return messageDao;
 	}
-
-
-
+	@Bean
+	public DispMessageEntityCache dispMessageEntityCache() {
+		return new DispMessageEntityCache();
+	}
 }

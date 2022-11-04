@@ -32,7 +32,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
+        <!--zookeeper-->
         <dependency>
             <groupId>org.apache.zookeeper</groupId>
             <artifactId>zookeeper</artifactId>
@@ -56,12 +56,13 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
-<!--        ====================================================================================-->
+        <!--===============================company依赖======================================-->
+        <!--        kafka-->
         <dependency>
-        <groupId>com.boco.gutil.kafka</groupId>
-        <artifactId>gutil-kafka-2.8.0</artifactId>
-        <version>1.0.8-SNAPSHOT</version>
-    </dependency>
+            <groupId>com.boco.gutil.kafka</groupId>
+            <artifactId>gutil-kafka-2.8.0</artifactId>
+            <version>1.0.8-SNAPSHOT</version>
+        </dependency>
         <dependency>
             <groupId>com.boco.xdsp</groupId>
             <artifactId>xdsp-smatcher-agent</artifactId>
@@ -79,14 +80,14 @@
             <version>${xdpp.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.boco.xdsp</groupId>
-            <artifactId>xdsp-protobuf4</artifactId>
-            <version>1.1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>xdpp-base</groupId>
             <artifactId>com.boco.xdpp.model.alarm</artifactId>
             <version>2.1.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.boco.xdsp</groupId>
+            <artifactId>xdsp-protobuf4</artifactId>
+            <version>1.1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>BOCO</groupId>
@@ -131,7 +132,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
     </dependencies>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -141,7 +141,5 @@
         <xdpp.version>1.2.0</xdpp.version>
         <zkclient.version>0.8</zkclient.version>
         <UCMPClient.version>0.4.4</UCMPClient.version>
-
     </properties>
-
 </project>

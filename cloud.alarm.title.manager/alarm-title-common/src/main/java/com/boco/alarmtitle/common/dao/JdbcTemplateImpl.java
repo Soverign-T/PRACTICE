@@ -2,6 +2,7 @@ package com.boco.alarmtitle.common.dao;
 
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
@@ -17,6 +18,7 @@ import java.util.Map;
 /**
  * @author hao 2022/10/31 16:51
  */
+
 public class JdbcTemplateImpl extends NamedParameterJdbcTemplate {
     private PlatformTransactionManager platformTransactionManager;
     private DefaultTransactionDefinition transactionDefinition;

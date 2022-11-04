@@ -4,14 +4,13 @@ package com.boco.alarmtitle;
 import com.boco.alarmtitle.common.cache.DispMessageEntityCache;
 import com.boco.alarmtitle.common.config.ApplicationConfig;
 import com.boco.alarmtitle.common.config.DatabaseProperties;
-import com.boco.alarmtitle.common.config.NmosdbConfig;
+import com.boco.alarmtitle.common.config.DatabaseConfiguration;
 import com.boco.alarmtitle.common.config.UCMPConfigFactory;
 import com.boco.alarmtitle.common.util.SpringContextUtils;
-import com.boco.alarmtitle.receive.ReceiveMessageListener;
+import com.boco.alarmtitle.receive.ReceiveMessageDataListener;
 import com.boco.alarmtitle.zk.ZKRegisterService;
 import com.boco.alarmtitle.zk.ZkNodeChangeListener;
-import com.boco.domain.Admin;
-import com.boco.domain.MatcherKafkaConfig;
+import com.boco.alarmtitle.kafka.MatcherKafkaConfig;
 import com.boco.gutil.registry.client.util.ConfigurationHelper;
 import com.boco.ucmp.client.Configuration;
 import org.springframework.boot.SpringApplication;
@@ -39,15 +38,15 @@ public class Application {
         }
         ApplicationConfig.serverPort = serverPort;
         System.setProperty("server.port", serverPort);
-        NmosdbConfig.initNmosdb();
+        DatabaseConfiguration.initNmosdb();
         SpringApplication.run(Application.class, args);
         ZKRegisterService zkRegisterService = ZKRegisterService.newInstance();
         zkRegisterService.setZkNodeChangeListener(zkNodeChangeListener);
         MatcherKafkaConfig matcherKafkaConfig = receiveTopic();
-        new ReceiveMessageListener(matcherKafkaConfig);
+        new ReceiveMessageDataListener(matcherKafkaConfig);
+
 
     }
-
 
     @Bean
     public SpringContextUtils initApplicationContext() {
@@ -58,13 +57,6 @@ public class Application {
     public DatabaseProperties initDatabaseProperties() throws Exception {
         DatabaseProperties databaseProperties = new DatabaseProperties();
         return databaseProperties.init(databaseProperties);
-    }
-
-    @Bean
-    public DispMessageEntityCache initCache() {
-        DispMessageEntityCache dispMessageEntityCache = new DispMessageEntityCache();
-        dispMessageEntityCache.init();
-        return dispMessageEntityCache;
     }
 
     public static ZkNodeChangeListener initSystemConfig() throws Exception {
@@ -100,6 +92,5 @@ public class Application {
         }
         return config;
     }
-
 
 }

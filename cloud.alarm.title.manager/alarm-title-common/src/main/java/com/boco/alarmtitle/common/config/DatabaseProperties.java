@@ -7,7 +7,6 @@ import lombok.ToString;
 import java.util.Properties;
 
 @ToString
-//@ConfigurationProperties(prefix="jdbc-3.proxool")
 public class DatabaseProperties {
 	
 	private String driverClass;

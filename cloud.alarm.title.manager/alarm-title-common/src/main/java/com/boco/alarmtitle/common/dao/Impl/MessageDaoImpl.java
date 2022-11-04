@@ -2,16 +2,16 @@ package com.boco.alarmtitle.common.dao.Impl;
 
 import com.boco.alarmtitle.common.dao.JdbcTemplateImpl;
 import com.boco.alarmtitle.common.dao.MessageDao;
-import net.sourceforge.jtds.jdbc.DateTime;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 /**
  * @author hao 2022/11/1 14:17
  */
+
 public class MessageDaoImpl implements MessageDao {
 
     private JdbcTemplateImpl jdbcTemplate;
@@ -25,10 +25,13 @@ public class MessageDaoImpl implements MessageDao {
     }
 
     @Override
-    public List<String> selectAll() {
-        String SQL = "select ne_id from nmosdb.pmmp_error_result";
+    public List<Map<String, Object>> selectAll() {
+        String SQL = "select * from nmosdb.pmmp_error_result";
+
         HashMap<String, Object> params = new HashMap<>();
-        return jdbcTemplate.queryForList(SQL, params, String.class);
+//        return jdbcTemplate.queryForList(SQL, params, String.class);
+        List<Map<String, Object>> maps = jdbcTemplate.queryForList(SQL, params);
+        return maps;
 
     }
 
@@ -58,10 +61,13 @@ public class MessageDaoImpl implements MessageDao {
         return jdbcTemplate.updateEx(sql, map);
     }
 
-    public static void main(String[] args) {
-        MessageDaoImpl messageDao = new MessageDaoImpl();
-        Integer integer = messageDao.insertBatch();
-        System.err.println(integer);
-    }
+//    public static void main(String[] args) {
+//        MessageDaoImpl messageDao = new MessageDaoImpl();
+////        Integer integer = messageDao.insertBatch();
+//        List<PmmpErrorResult> pmmpErrorResults = messageDao.selectAll();
+//        for (PmmpErrorResult pmmpErrorResult : pmmpErrorResults) {
+//            System.err.println(pmmpErrorResult);
+//        }
+//    }
 
 }

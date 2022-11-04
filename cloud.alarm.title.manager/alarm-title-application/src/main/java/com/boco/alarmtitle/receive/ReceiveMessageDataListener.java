@@ -1,9 +1,9 @@
 package com.boco.alarmtitle.receive;
 
-import com.boco.alarmtitle.constant.AlarmFieldConstants;
+import com.boco.alarmtitle.common.constant.AlarmFieldConstants;
+import com.boco.alarmtitle.kafka.KafkaMessageParser;
+import com.boco.alarmtitle.kafka.MatcherKafkaConfig;
 import com.boco.domain.DispMessageEntity;
-import com.boco.domain.KafkaMessageParser;
-import com.boco.domain.MatcherKafkaConfig;
 import com.boco.kafka.message.MessageHeader;
 import com.boco.kafka.message.MessageListener;
 import com.boco.alarmtitle.client.SubClientManager;
@@ -13,8 +13,6 @@ import com.boco.xdpp.model.alarm.exports.beans.AlarmCFP;
 import com.boco.xdpp.model.alarm.exports.beans.AlarmFP;
 import com.boco.xdpp.model.alarm.exports.beans.DynamicMessageMap;
 import com.google.protobuf.ByteString;
-import com.google.protobuf.InvalidProtocolBufferException;
-import org.apache.commons.lang.StringUtils;
 import org.xdsp.smatcher.agent.manager.ClientAgent;
 import org.xdsp.smatcher.agent.model.MatcherClientInfo;
 
@@ -26,13 +24,13 @@ import java.util.Map;
  * @author hao 2022/10/29 15:02
  */
 
-public class ReceiveMessageListener implements MessageListener {
+public class ReceiveMessageDataListener implements MessageListener {
 
     private ClientAgent clientAgent;
 
     private final SubClientManager subClientManager;
 
-    public ReceiveMessageListener(MatcherKafkaConfig matcherKafkaConfig) {
+    public ReceiveMessageDataListener(MatcherKafkaConfig matcherKafkaConfig) {
         this.clientAgent = new ClientAgent();
         MatcherClientInfo matcherClientInfo = buildMatcherInfo(matcherKafkaConfig);
         clientAgent.init(matcherClientInfo);
@@ -70,8 +68,8 @@ public class ReceiveMessageListener implements MessageListener {
                     dispMessageEntity.setAlarmCFP(alarmCFP);
                     dispMessageEntity.setActiveStatus(activeStatus.toString());
                     dispMessageEntity.setEventTime(eventTime.toString());
+                    this.subClientManager.receive(dynamicMessageMap, dispMessageEntity);
                 }
-                this.subClientManager.receive(filterIdList,dispMessageEntity);
             }
         } catch (Exception e) {
             String messageContent = "";

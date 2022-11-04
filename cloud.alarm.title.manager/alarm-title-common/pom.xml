@@ -18,43 +18,16 @@
         <alarm.component>0.0.1</alarm.component>
     </properties>
 <dependencies>
+<!--    JDBC-->
     <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-jdbc</artifactId>
     </dependency>
+<!--    oracle驱动-->
     <dependency>
         <groupId>ojdbc</groupId>
         <artifactId>ojdbc6</artifactId>
         <version>11.2.0.3</version>
-    </dependency>
-
-    <dependency>
-        <groupId>com.boco.component</groupId>
-        <artifactId>component-datasource</artifactId>
-        <version>${alarm.component}</version>
-        <exclusions>
-            <exclusion>
-                <groupId>com.boco.component</groupId>
-                <artifactId>component-logger</artifactId>
-            </exclusion>
-
-            <exclusion>
-                <groupId>com.proxool</groupId>
-                <artifactId>proxool</artifactId>
-            </exclusion>
-            <exclusion>
-                <groupId>com.proxool</groupId>
-                <artifactId>proxool-cglib</artifactId>
-            </exclusion>
-            <exclusion>
-                <groupId>com.boco</groupId>
-                <artifactId>LDAPTtools</artifactId>
-            </exclusion>
-            <exclusion>
-                <groupId>com.boco</groupId>
-                <artifactId>JApmPwdReader</artifactId>
-            </exclusion>
-        </exclusions>
     </dependency>
     <dependency>
         <groupId>org.springframework.boot</groupId>
@@ -76,6 +49,35 @@
         <groupId>org.springframework</groupId>
         <artifactId>spring-context-support</artifactId>
     </dependency>
+<!--==================================company依赖======================================-->
+    <dependency>
+        <groupId>com.boco.component</groupId>
+        <artifactId>component-datasource</artifactId>
+        <version>${alarm.component}</version>
+        <exclusions>
+            <exclusion>
+                <groupId>com.boco.component</groupId>
+                <artifactId>component-logger</artifactId>
+            </exclusion>
+            <exclusion>
+                <groupId>com.proxool</groupId>
+                <artifactId>proxool</artifactId>
+            </exclusion>
+            <exclusion>
+                <groupId>com.proxool</groupId>
+                <artifactId>proxool-cglib</artifactId>
+            </exclusion>
+            <exclusion>
+                <groupId>com.boco</groupId>
+                <artifactId>LDAPTtools</artifactId>
+            </exclusion>
+            <exclusion>
+                <groupId>com.boco</groupId>
+                <artifactId>JApmPwdReader</artifactId>
+            </exclusion>
+        </exclusions>
+    </dependency>
+<!--    pojo-->
     <dependency>
         <groupId>com.boco</groupId>
         <artifactId>alarm-title-domain</artifactId>

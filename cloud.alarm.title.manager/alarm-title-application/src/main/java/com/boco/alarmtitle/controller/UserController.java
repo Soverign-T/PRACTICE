@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author hao 2022/10/31 14:29
@@ -23,5 +24,9 @@ public class UserController {
     @RequestMapping("/zhangsan")
     public Integer selectAll() {
         return userDao.insertBatch();
+    }
+    @RequestMapping("/lisi")
+    public List<Map<String, Object>> selectAllaa() {
+        return userDao.selectAll();
     }
 }

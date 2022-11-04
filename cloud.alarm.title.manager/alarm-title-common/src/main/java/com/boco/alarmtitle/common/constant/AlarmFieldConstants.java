@@ -1,4 +1,4 @@
-package com.boco.alarmtitle.constant;
+package com.boco.alarmtitle.common.constant;
 
 /**
  * @author hao 2022/11/2 10:37

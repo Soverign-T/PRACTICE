@@ -21,7 +21,7 @@ public class UCMPConfigFactory {
             throw new Exception("please set system properties 'app_instance',eg:-Dapp_instance=Instance-1");
         }
         String zookeeperUrl = System.getProperty("config.zookeeper.url");
-        if (instanceName == null || instanceName.length() == 0) {
+        if (zookeeperUrl == null || zookeeperUrl.length() == 0) {
             throw new Exception("please set system properties 'config.zookeeper.url',eg:-Dconfig.zookeeper.url=10.10.1.1:2181,10.10.1.2:2181");
         }
         ConfigurationHelper configurationHelper = ConfigurationHelper.getInstance();

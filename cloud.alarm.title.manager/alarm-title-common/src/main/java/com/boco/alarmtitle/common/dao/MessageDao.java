@@ -7,7 +7,7 @@ import java.util.Map;
  * @author hao 2022/11/1 14:17
  */
 public interface MessageDao {
-    List<String> selectAll();
+    List<Map<String, Object>> selectAll();
 
     Integer insertBatch();
 
