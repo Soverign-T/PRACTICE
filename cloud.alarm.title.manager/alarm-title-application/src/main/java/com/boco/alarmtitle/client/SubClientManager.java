@@ -20,10 +20,10 @@ public class SubClientManager {
         return subClientManager;
     }
 
-    public void receive(DynamicMessageMap dynamicMessageMap, DispMessageEntity dispMessageEntity) {
+    public void receive(DispMessageEntity dispMessageEntity) {
 //        for (Map.Entry<String, Object> entry : dynamicMessageMap.getStringMap().entrySet()) {
 //            System.err.println(entry.getKey() + "+" + entry.getValue());
 //        }
-        System.err.println(dispMessageEntity);
+        System.err.println(dispMessageEntity.toString());
     }
 }

@@ -88,9 +88,18 @@ public class Application {
         config.setClientName(clientName);
         config.setBootstrapServers(kafkaBrokers);
         if (receiveThreadSize != null && !receiveThreadSize.isEmpty()){
-            config.setReceiveThreadSize(Integer.parseInt(receiveThreadSize));
+            config.setReceiveThreadSize(1);
         }
         return config;
+        /*MatcherKafkaConfig config = new MatcherKafkaConfig();
+        config.setGroupId("test");
+        config.setTopicName("MAT_AGENT.Q");
+        config.setZookeeperConnect("10.10.2.22:2182,10.10.2.23;2182,10.10.2.24:2182");
+        config.setZookeeperPath("/test");
+        config.setClientName("zhangsan");
+        config.setBootstrapServers("10.10.2.42:10823,10.10.2.41:10784,10.10.2.24:10745,10.10.2.172:10706");
+        config.setReceiveThreadSize(1);
+        return config;*/
     }
 
 }

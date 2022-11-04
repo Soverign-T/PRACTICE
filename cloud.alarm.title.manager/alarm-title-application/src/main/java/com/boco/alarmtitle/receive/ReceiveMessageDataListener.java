@@ -68,8 +68,8 @@ public class ReceiveMessageDataListener implements MessageListener {
                     dispMessageEntity.setAlarmCFP(alarmCFP);
                     dispMessageEntity.setActiveStatus(activeStatus.toString());
                     dispMessageEntity.setEventTime(eventTime.toString());
-                    this.subClientManager.receive(dynamicMessageMap, dispMessageEntity);
                 }
+                    this.subClientManager.receive(dispMessageEntity);
             }
         } catch (Exception e) {
             String messageContent = "";
