@@ -1,7 +1,7 @@
 package com.boco.alarmtitle.receive;
 
 import com.boco.alarmtitle.common.constant.AlarmFieldConstants;
-import com.boco.alarmtitle.kafka.KafkaMessageParser;
+import com.boco.alarmtitle.kafka.parse.KafkaMessageParser;
 import com.boco.alarmtitle.kafka.MatcherKafkaConfig;
 import com.boco.domain.DispMessageEntity;
 import com.boco.kafka.message.MessageHeader;
@@ -68,8 +68,13 @@ public class ReceiveMessageDataListener implements MessageListener {
                     dispMessageEntity.setAlarmCFP(alarmCFP);
                     dispMessageEntity.setActiveStatus(activeStatus.toString());
                     dispMessageEntity.setEventTime(eventTime.toString());
+                    System.err.println(dynamicMessageMap.getStringMap());
+                    System.err.println("----------------");
+                    System.err.println(dynamicMessageMap.getIntMap());
+                    System.err.println("----------------");
+
                 }
-                    this.subClientManager.receive(dispMessageEntity);
+                    this.subClientManager.receive(filterIdList,dispMessageEntity);
             }
         } catch (Exception e) {
             String messageContent = "";

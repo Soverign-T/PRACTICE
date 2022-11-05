@@ -7,6 +7,7 @@ import com.boco.alarmtitle.common.config.DatabaseProperties;
 import com.boco.alarmtitle.common.config.DatabaseConfiguration;
 import com.boco.alarmtitle.common.config.UCMPConfigFactory;
 import com.boco.alarmtitle.common.util.SpringContextUtils;
+import com.boco.alarmtitle.kafka.parse.AlarmDescLoader;
 import com.boco.alarmtitle.receive.ReceiveMessageDataListener;
 import com.boco.alarmtitle.zk.ZKRegisterService;
 import com.boco.alarmtitle.zk.ZkNodeChangeListener;
@@ -39,13 +40,13 @@ public class Application {
         ApplicationConfig.serverPort = serverPort;
         System.setProperty("server.port", serverPort);
         DatabaseConfiguration.initNmosdb();
+        AlarmDescLoader.loadAlarmObjectMapping();
         SpringApplication.run(Application.class, args);
         ZKRegisterService zkRegisterService = ZKRegisterService.newInstance();
         zkRegisterService.setZkNodeChangeListener(zkNodeChangeListener);
         MatcherKafkaConfig matcherKafkaConfig = receiveTopic();
         new ReceiveMessageDataListener(matcherKafkaConfig);
-
-
+        SpringContextUtils.getApplicationContext().getBean(DispMessageEntityCache.class).init();
     }
 
     @Bean
@@ -59,6 +60,10 @@ public class Application {
         return databaseProperties.init(databaseProperties);
     }
 
+    @Bean
+    public DispMessageEntityCache dispMessageEntityCache() {
+        return new DispMessageEntityCache();
+    }
     public static ZkNodeChangeListener initSystemConfig() throws Exception {
         Configuration configuration = ConfigurationHelper.getUcmpConf();
         Properties properties = configuration.getProperties("system");

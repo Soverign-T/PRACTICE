@@ -132,6 +132,24 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+            <groupId>com.boco.component</groupId>
+            <artifactId>component-protobuf-dynamic</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.boco.component</groupId>
+                    <artifactId>component-protobuf-2.5.0</artifactId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>xdsp-kafkautil10</artifactId>
+                    <groupId>com.boco.xdsp</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+        </dependency>
     </dependencies>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

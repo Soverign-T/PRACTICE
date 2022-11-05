@@ -4,6 +4,7 @@ package com.boco.alarmtitle.client;
 import com.boco.domain.DispMessageEntity;
 import com.boco.xdpp.model.alarm.exports.beans.DynamicMessageMap;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -20,10 +21,11 @@ public class SubClientManager {
         return subClientManager;
     }
 
-    public void receive(DispMessageEntity dispMessageEntity) {
-//        for (Map.Entry<String, Object> entry : dynamicMessageMap.getStringMap().entrySet()) {
-//            System.err.println(entry.getKey() + "+" + entry.getValue());
-//        }
+    /**
+     * 收到消息处理
+     * @param dispMessageEntity
+     */
+    public void receive(List<Integer> filterIdList, DispMessageEntity dispMessageEntity) {
         System.err.println(dispMessageEntity.toString());
     }
 }

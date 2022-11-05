@@ -15,54 +15,49 @@ import javax.sql.DataSource;
 import java.sql.SQLException;
 
 /**
- * 
  * @Description <p>数据库等配置</p>
  */
 @Configuration
 @EnableConfigurationProperties
 public class CommonConfig {
 
-	//private static Logger logger = LoggerFactory.getLogger(CommonConfig.class);
-	@Autowired
-	private DatabaseProperties databaseProperties;
+    //private static Logger logger = LoggerFactory.getLogger(CommonConfig.class);
+    @Autowired
+    private DatabaseProperties databaseProperties;
 
-	@Bean(name = "dataSource")
-	public DataSource dataSource() throws SQLException {
-		//logger.debug("数据库连接信息:{}", databaseProperties);
-		DruidDataSourceDelegate dataSource = new DruidDataSourceDelegate();
-		dataSource.setName(databaseProperties.getAlias());
-		dataSource.setUrl(databaseProperties.getDriverUrl());
-		dataSource.setDriverClassName(databaseProperties.getDriverClass());
-		dataSource.setUsername(databaseProperties.getUser());
-		dataSource.setPassword(databaseProperties.getPassword());
-		dataSource.setInitialSize(1);
-		dataSource.setMaxWait(60000);
-		dataSource.setMinIdle(databaseProperties.getMinimumConnectionCount());
-		dataSource.setMaxActive(databaseProperties.getMaximumActiveTime());
-		dataSource.setTimeBetweenEvictionRunsMillis(60000);
-		dataSource.setMinEvictableIdleTimeMillis(300000);
-		dataSource.setValidationQuery(databaseProperties.getHouseKeepingTestSql());
-		dataSource.setTestWhileIdle(true);
-		dataSource.setTestOnBorrow(false);
-		dataSource.setTestOnReturn(false);
-		dataSource.setPoolPreparedStatements(true);
-		dataSource.setMaxPoolPreparedStatementPerConnectionSize(20);
-		return dataSource;
-	}
+    @Bean(name = "dataSource")
+    public DataSource dataSource() {
+        //logger.debug("数据库连接信息:{}", databaseProperties);
+        DruidDataSourceDelegate dataSource = new DruidDataSourceDelegate();
+        dataSource.setName(databaseProperties.getAlias());
+        dataSource.setUrl(databaseProperties.getDriverUrl());
+        dataSource.setDriverClassName(databaseProperties.getDriverClass());
+        dataSource.setUsername(databaseProperties.getUser());
+        dataSource.setPassword(databaseProperties.getPassword());
+        dataSource.setInitialSize(1);
+        dataSource.setMaxWait(60000);
+        dataSource.setMinIdle(databaseProperties.getMinimumConnectionCount());
+        dataSource.setMaxActive(databaseProperties.getMaximumActiveTime());
+        dataSource.setTimeBetweenEvictionRunsMillis(60000);
+        dataSource.setMinEvictableIdleTimeMillis(300000);
+        dataSource.setValidationQuery(databaseProperties.getHouseKeepingTestSql());
+        dataSource.setTestWhileIdle(true);
+        dataSource.setTestOnBorrow(false);
+        dataSource.setTestOnReturn(false);
+        dataSource.setPoolPreparedStatements(true);
+        dataSource.setMaxPoolPreparedStatementPerConnectionSize(20);
+        return dataSource;
+    }
 
-	@Bean(name = "jdbcTemplateImpl")
-	public JdbcTemplateImpl jdbcTemplate(DataSource dataSource) {
-		return new JdbcTemplateImpl(dataSource);
-	}
+    @Bean(name = "jdbcTemplateImpl")
+    public JdbcTemplateImpl jdbcTemplate(DataSource dataSource) {
+        return new JdbcTemplateImpl(dataSource);
+    }
 
-	@Bean(name = "messageDaoImpl")
-	public MessageDao messageDaoImpl(@Qualifier("jdbcTemplateImpl") JdbcTemplateImpl jdbcTemplate) {
-		MessageDaoImpl messageDao = new MessageDaoImpl();
-		messageDao.setJdbcTemplate(jdbcTemplate);
-		return messageDao;
-	}
-	@Bean
-	public DispMessageEntityCache dispMessageEntityCache() {
-		return new DispMessageEntityCache();
-	}
+    @Bean(name = "messageDaoImpl")
+    public MessageDao messageDaoImpl(@Qualifier("jdbcTemplateImpl") JdbcTemplateImpl jdbcTemplate) {
+        MessageDaoImpl messageDao = new MessageDaoImpl();
+        messageDao.setJdbcTemplate(jdbcTemplate);
+        return messageDao;
+    }
 }

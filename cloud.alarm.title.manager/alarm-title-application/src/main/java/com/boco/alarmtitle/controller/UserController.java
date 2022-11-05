@@ -1,5 +1,6 @@
 package com.boco.alarmtitle.controller;
 
+import com.boco.alarmtitle.common.cache.DispMessageEntityCache;
 import com.boco.alarmtitle.common.dao.MessageDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,12 @@ import java.util.Map;
 @RequestMapping("/")
 public class UserController {
     private MessageDao userDao;
+    private DispMessageEntityCache dispMessageEntityCache;
+
+    @Autowired
+    public void setDispMessageEntityCache(DispMessageEntityCache dispMessageEntityCache) {
+        this.dispMessageEntityCache = dispMessageEntityCache;
+    }
 
     @Autowired
     public void setUserDao(MessageDao userDao) {
@@ -25,8 +32,9 @@ public class UserController {
     public Integer selectAll() {
         return userDao.insertBatch();
     }
+
     @RequestMapping("/lisi")
     public List<Map<String, Object>> selectAllaa() {
-        return userDao.selectAll();
+        return dispMessageEntityCache.getData();
     }
 }

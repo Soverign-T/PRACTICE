@@ -11,44 +11,35 @@ import java.util.*;
 
 public class DispMessageEntityCache {
 
-//    Map<String, Object> concurrentHashMap = new ConcurrentHashMap<>();
+    private final List<Map<String, Object>> data = new ArrayList<>();
     private MessageDao messageDao;
-
     @Autowired
     public void setMessageDao(MessageDao messageDao) {
         this.messageDao = messageDao;
     }
 
+    public List<Map<String, Object>> getList() {
+        return data;
+    }
+
+    public List<Map<String, Object>> getData() {
+        if (getList().size() == 0) {
+            init();
+        }
+        return data;
+    }
 
     /**
      * 从数据库加载数据到缓存
      */
     public void init() {
         List<Map<String, Object>> list = messageDao.selectAll();
+        List<Map<String, Object>> disMessageCache = getList();
+        disMessageCache.clear();
+        disMessageCache.addAll(list);
+
         for (Map<String, Object> stringObjectMap : list) {
             System.err.println(stringObjectMap);
         }
-/*//        concurrentHashMap = list.stream().collect(Collectors.toMap(obj -> String.valueOf(obj), s -> s));
-//        for (Map.Entry<String, Object> stringObjectEntry : concurrentHashMap.entrySet()) {
-//            System.err.println("key:" + stringObjectEntry.getKey() + "+" + "value:" + stringObjectEntry.getValue());
-//        }
-    }
-
-
-    //    public static void main(String[] args) {
-//        List<Admin> list = new ArrayList<>();
-//
-//        Admin admin = new Admin(1,"zhangsan");
-//        Admin admin1 = new Admin(2,"zhangsan1");
-//        list.add(admin);
-//        list.add(admin1);
-//        Map<Integer, Admin> map = list.stream().collect(Collectors.toMap(Admin::getId, s -> s));
-//        for (Integer integer : map.keySet()) {
-//            System.err.println(integer+ ""+map.get(integer));
-//        }
-//    }
-//    public static void initCache() {
-//        init();
-//    }*/
     }
 }
