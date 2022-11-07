@@ -6,7 +6,7 @@ import com.boco.alarmtitle.kafka.MatcherKafkaConfig;
 import com.boco.domain.DispMessageEntity;
 import com.boco.kafka.message.MessageHeader;
 import com.boco.kafka.message.MessageListener;
-import com.boco.alarmtitle.client.SubClientManager;
+import com.boco.alarmtitle.service.MessageDataManager;
 import com.boco.xdpp.bean.exports.proto.ProtoRealTimeMessage;
 import com.boco.xdpp.bean.exports.proto.ProtoRealTimeMessage.ZipRealTimeMessage;
 import com.boco.xdpp.model.alarm.exports.beans.AlarmCFP;
@@ -28,7 +28,7 @@ public class ReceiveMessageDataListener implements MessageListener {
 
     private ClientAgent clientAgent;
 
-    private final SubClientManager subClientManager;
+    private final MessageDataManager messageDataManager;
 
     public ReceiveMessageDataListener(MatcherKafkaConfig matcherKafkaConfig) {
         this.clientAgent = new ClientAgent();
@@ -39,7 +39,7 @@ public class ReceiveMessageDataListener implements MessageListener {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        this.subClientManager = SubClientManager.newInstance();
+        this.messageDataManager = MessageDataManager.newInstance();
     }
 
     @Override
@@ -74,7 +74,7 @@ public class ReceiveMessageDataListener implements MessageListener {
                     System.err.println("----------------");
 
                 }
-                    this.subClientManager.receive(filterIdList,dispMessageEntity);
+                    this.messageDataManager.receive(filterIdList,dispMessageEntity);
             }
         } catch (Exception e) {
             String messageContent = "";

@@ -1,7 +1,7 @@
 package com.boco.alarmtitle;
 
 
-import com.boco.alarmtitle.common.cache.DispMessageEntityCache;
+import com.boco.alarmtitle.common.cache.TitleTextCache;
 import com.boco.alarmtitle.common.config.ApplicationConfig;
 import com.boco.alarmtitle.common.config.DatabaseProperties;
 import com.boco.alarmtitle.common.config.DatabaseConfiguration;
@@ -40,13 +40,14 @@ public class Application {
         ApplicationConfig.serverPort = serverPort;
         System.setProperty("server.port", serverPort);
         DatabaseConfiguration.initNmosdb();
+        //初始化PB
         AlarmDescLoader.loadAlarmObjectMapping();
         SpringApplication.run(Application.class, args);
         ZKRegisterService zkRegisterService = ZKRegisterService.newInstance();
         zkRegisterService.setZkNodeChangeListener(zkNodeChangeListener);
         MatcherKafkaConfig matcherKafkaConfig = receiveTopic();
         new ReceiveMessageDataListener(matcherKafkaConfig);
-        SpringContextUtils.getApplicationContext().getBean(DispMessageEntityCache.class).init();
+        SpringContextUtils.getApplicationContext().getBean(TitleTextCache.class).init();
     }
 
     @Bean
@@ -59,10 +60,9 @@ public class Application {
         DatabaseProperties databaseProperties = new DatabaseProperties();
         return databaseProperties.init(databaseProperties);
     }
-
     @Bean
-    public DispMessageEntityCache dispMessageEntityCache() {
-        return new DispMessageEntityCache();
+    public TitleTextCache titleTextCache() {
+        return new TitleTextCache();
     }
     public static ZkNodeChangeListener initSystemConfig() throws Exception {
         Configuration configuration = ConfigurationHelper.getUcmpConf();

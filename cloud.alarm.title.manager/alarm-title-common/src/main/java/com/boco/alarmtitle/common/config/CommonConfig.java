@@ -1,6 +1,5 @@
 package com.boco.alarmtitle.common.config;
 
-import com.boco.alarmtitle.common.cache.DispMessageEntityCache;
 import com.boco.alarmtitle.common.dao.Impl.MessageDaoImpl;
 import com.boco.alarmtitle.common.dao.JdbcTemplateImpl;
 import com.boco.alarmtitle.common.dao.MessageDao;

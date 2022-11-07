@@ -30,8 +30,7 @@ public class MessageDaoImpl implements MessageDao {
 
         HashMap<String, Object> params = new HashMap<>();
 //        return jdbcTemplate.queryForList(SQL, params, String.class);
-        List<Map<String, Object>> maps = jdbcTemplate.queryForList(SQL, params);
-        return maps;
+        return jdbcTemplate.queryForList(SQL, params);
 
     }
 
