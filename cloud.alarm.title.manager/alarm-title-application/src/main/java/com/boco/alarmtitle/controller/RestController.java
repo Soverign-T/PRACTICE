@@ -1,7 +1,7 @@
 package com.boco.alarmtitle.controller;
 
-import com.boco.alarmtitle.common.cache.TitleTextCache;
-import com.boco.alarmtitle.common.dao.MessageDao;
+import com.boco.alarmtitle.common.cache.DBLoaderProcess;
+import com.boco.alarmtitle.common.dao.MessageDataDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,27 +15,28 @@ import java.util.Map;
 @org.springframework.web.bind.annotation.RestController
 @RequestMapping("/")
 public class RestController {
-    private MessageDao userDao;
-    private TitleTextCache titleTextCache;
+    private MessageDataDao userDao;
+    private DBLoaderProcess DBLoaderProcess;
 
     @Autowired
-    public void setTitleTextCache(TitleTextCache titleTextCache) {
-        this.titleTextCache = titleTextCache;
+    public void setTitleTextCache(DBLoaderProcess DBLoaderProcess) {
+        this.DBLoaderProcess = DBLoaderProcess;
     }
 
     @Autowired
-    public void setUserDao(MessageDao userDao) {
+    public void setUserDao(MessageDataDao userDao) {
         this.userDao = userDao;
     }
 
     /**
      * 批量插入(数据库)
+     *
      * @return
      */
-    @RequestMapping("/batchUpdate")
-    public Integer batchUpdate() {
-        return userDao.insertBatch();
-    }
+//    @RequestMapping("/batchUpdate")
+//    public Integer batchUpdate(Map<String, String> param) {
+//        return userDao.insertBatch(param);
+//    }
 
     /**
      * 从缓存加载数据
@@ -43,6 +44,6 @@ public class RestController {
      */
     @GetMapping("/selectAll")
     public List<Map<String, Object>> selectAll() {
-        return titleTextCache.getData();
+        return DBLoaderProcess.getData();
     }
 }

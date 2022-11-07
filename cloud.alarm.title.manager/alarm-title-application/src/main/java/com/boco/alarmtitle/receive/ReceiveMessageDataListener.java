@@ -13,6 +13,7 @@ import com.boco.xdpp.model.alarm.exports.beans.AlarmCFP;
 import com.boco.xdpp.model.alarm.exports.beans.AlarmFP;
 import com.boco.xdpp.model.alarm.exports.beans.DynamicMessageMap;
 import com.google.protobuf.ByteString;
+import org.springframework.util.Assert;
 import org.xdsp.smatcher.agent.manager.ClientAgent;
 import org.xdsp.smatcher.agent.model.MatcherClientInfo;
 
@@ -56,6 +57,7 @@ public class ReceiveMessageDataListener implements MessageListener {
                 DispMessageEntity dispMessageEntity = new DispMessageEntity();
                 dispMessageEntity.setHeader(header);
                 dispMessageEntity.setProtoRealTimeMessageEntry(protoRealTimeMessageEntry);
+                Map<String, Object> stringMap = null;
                 if ("1407".equals(entryMessageType)) {
                     dispMessageEntity.setHeader(header);
                     dispMessageEntity.setProtoRealTimeMessageEntry(protoRealTimeMessageEntry);
@@ -68,13 +70,18 @@ public class ReceiveMessageDataListener implements MessageListener {
                     dispMessageEntity.setAlarmCFP(alarmCFP);
                     dispMessageEntity.setActiveStatus(activeStatus.toString());
                     dispMessageEntity.setEventTime(eventTime.toString());
+                    //解析title_text信息
+                    stringMap = dynamicMessageMap.getStringMap();
                     System.err.println(dynamicMessageMap.getStringMap());
                     System.err.println("----------------");
                     System.err.println(dynamicMessageMap.getIntMap());
                     System.err.println("----------------");
 
                 }
-                    this.messageDataManager.receive(filterIdList,dispMessageEntity);
+                Assert.notEmpty(stringMap,()->{
+                    throw new RuntimeException(AlarmFieldConstants.TITLE_TEXT_MAP_ERROR);
+                });
+                this.messageDataManager.receive(stringMap,dispMessageEntity);
             }
         } catch (Exception e) {
             String messageContent = "";

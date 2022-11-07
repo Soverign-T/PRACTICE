@@ -1,8 +1,8 @@
 package com.boco.alarmtitle.common.config;
 
-import com.boco.alarmtitle.common.dao.Impl.MessageDaoImpl;
+import com.boco.alarmtitle.common.dao.Impl.MessageDataDaoImpl;
 import com.boco.alarmtitle.common.dao.JdbcTemplateImpl;
-import com.boco.alarmtitle.common.dao.MessageDao;
+import com.boco.alarmtitle.common.dao.MessageDataDao;
 import com.boco.component.datasource.druid.DruidDataSourceDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -11,7 +11,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
-import java.sql.SQLException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Description <p>数据库等配置</p>
@@ -24,8 +27,12 @@ public class CommonConfig {
     @Autowired
     private DatabaseProperties databaseProperties;
 
+    /**
+     * 数据库连接
+     * @return
+     */
     @Bean(name = "dataSource")
-    public DataSource dataSource() {
+    public   DataSource dataSource() {
         //logger.debug("数据库连接信息:{}", databaseProperties);
         DruidDataSourceDelegate dataSource = new DruidDataSourceDelegate();
         dataSource.setName(databaseProperties.getAlias());
@@ -48,15 +55,35 @@ public class CommonConfig {
         return dataSource;
     }
 
+    /**
+     * jdbc Bean
+     * @param dataSource
+     * @return
+     */
     @Bean(name = "jdbcTemplateImpl")
     public JdbcTemplateImpl jdbcTemplate(DataSource dataSource) {
         return new JdbcTemplateImpl(dataSource);
     }
 
+    /**
+     * dao层Bean
+     * @param jdbcTemplate
+     * @return
+     */
     @Bean(name = "messageDaoImpl")
-    public MessageDao messageDaoImpl(@Qualifier("jdbcTemplateImpl") JdbcTemplateImpl jdbcTemplate) {
-        MessageDaoImpl messageDao = new MessageDaoImpl();
+    public MessageDataDao messageDaoImpl(@Qualifier("jdbcTemplateImpl") JdbcTemplateImpl jdbcTemplate) {
+        MessageDataDaoImpl messageDao = new MessageDataDaoImpl();
         messageDao.setJdbcTemplate(jdbcTemplate);
         return messageDao;
+    }
+
+    /**
+     * 线程池
+     * @return
+     */
+    @Bean
+    public ThreadPoolExecutor threadPoolExecutor() {
+        return new ThreadPoolExecutor(5, 10,
+                120, TimeUnit.SECONDS, new LinkedBlockingQueue<>(20), Executors.defaultThreadFactory(), new ThreadPoolExecutor.AbortPolicy());
     }
 }

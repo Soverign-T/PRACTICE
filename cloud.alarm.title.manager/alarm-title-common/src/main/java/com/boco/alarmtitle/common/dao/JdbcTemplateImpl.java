@@ -1,5 +1,7 @@
 package com.boco.alarmtitle.common.dao;
 
+import com.boco.domain.PmmpErrorResult;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Component;
