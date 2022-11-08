@@ -2,15 +2,19 @@ package com.boco.alarmtitle.service;
 
 
 import com.boco.alarmtitle.common.cache.DBLoaderProcess;
+import com.boco.alarmtitle.common.cache.DataCache;
 import com.boco.alarmtitle.common.dao.MessageDataDao;
+import com.boco.alarmtitle.common.event.DataChangeEvent;
+import com.boco.alarmtitle.common.util.SpringContextUtils;
 import com.boco.domain.DispMessageEntity;
+import com.boco.domain.TfuAlarmTitle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.stream.Collectors;
 
 
 /**
@@ -21,11 +25,11 @@ public class MessageDataManager {
     private static MessageDataManager messageDataManager;
     private MessageDataDao messageDataDao;
     private DBLoaderProcess dBLoaderProcess;
-    private ThreadPoolExecutor threadPoolExecutor;
+    private DataCache dataCache;
 
     @Autowired
-    public void setThreadPoolExecutor(ThreadPoolExecutor threadPoolExecutor) {
-        this.threadPoolExecutor = threadPoolExecutor;
+    public void setDataCache(DataCache dataCache) {
+        this.dataCache = dataCache;
     }
 
     @Autowired
@@ -49,38 +53,18 @@ public class MessageDataManager {
     /**
      * 收到消息处理
      *
-     * @param dispMessageEntity
+     * @param
      */
     public void receive(Map<String, Object> stringsMap, DispMessageEntity dispMessageEntity) {
 
-        // 解析出消息数据中有效字段
-        //TODO 时间字段修改
-        HashMap<String, Object> params = new HashMap<>();
-//        String title_text = (String) stringsMap.get("title_text");
-//        String title_text1 = (String) stringsMap.get("title_text");
-//        String title_text12 = (String) stringsMap.get("title_text");
-//        String title_text123 = (String) stringsMap.get("title_text");
-//        String title_text11 = (String) stringsMap.get("title_text");
-//        String title_text111 = (String) stringsMap.get("title_text");
-//        String title_text121 = (String) stringsMap.get("title_text");
-//        String title_text1231 = (String) stringsMap.get("title_text");
-        params.put("title_text", stringsMap.get("title_text"));
-        params.put("title_text1", stringsMap.get("title_text"));
-        params.put("title_text12", stringsMap.get("title_text"));
-        params.put("title_text123", stringsMap.get("title_text"));
-        params.put("title_text11 ", stringsMap.get("title_text"));
-        params.put("title_text111 ", stringsMap.get("title_text"));
-        params.put("title_text121 ", stringsMap.get("title_text"));
-        params.put("title_text1231", stringsMap.get("title_text"));
-        //TODO 1.插入到数据库
-
-        //TODO 2.添加到缓存
-        dBLoaderProcess.pushData(params);
-        //开启新线程
-        CompletableFuture.runAsync(() -> {
-            //入库
-            messageDataDao.insertBatch(params);
-            //添加到缓存
-        }, threadPoolExecutor);
+        Map<String, TfuAlarmTitle> receiveMap = dataCache.getReceiveMap();
+        List<TfuAlarmTitle> resultList= dataCache.getList();
+        TfuAlarmTitle TfuAlarmTitle = new TfuAlarmTitle();
+        TfuAlarmTitle.setTitleId((String) stringsMap.get(""));
+        TfuAlarmTitle.setTitle((String) stringsMap.get(""));
+        resultList.add(TfuAlarmTitle);
+        Map<String, TfuAlarmTitle> collectMap = resultList.stream().collect(Collectors.toMap(com.boco.domain.TfuAlarmTitle::getTitleId, TfuAlarmTitle1 -> TfuAlarmTitle1));
+        receiveMap.putAll(collectMap);
+        SpringContextUtils.getApplicationContext().publishEvent(new DataChangeEvent());
     }
 }

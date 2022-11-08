@@ -2,6 +2,7 @@ package com.boco.alarmtitle.controller;
 
 import com.boco.alarmtitle.common.cache.DBLoaderProcess;
 import com.boco.alarmtitle.common.dao.MessageDataDao;
+import com.boco.domain.PmmpErrorResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,4 +47,9 @@ public class RestController {
     public List<Map<String, Object>> selectAll() {
         return DBLoaderProcess.getData();
     }
+    @GetMapping("/selectAlldata")
+    public List<PmmpErrorResult> selectAlldata() {
+        return userDao.selectAlldata();
+    }
+
 }

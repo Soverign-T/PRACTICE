@@ -1,9 +1,12 @@
 package com.boco.alarmtitle.common.cache;
 
 import com.boco.alarmtitle.common.dao.MessageDataDao;
+import com.boco.alarmtitle.common.event.DataChangeEvent;
 import com.boco.domain.PmmpErrorResult;
 import com.boco.domain.TfuAlarmTitle;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -13,7 +16,7 @@ import java.util.stream.Collectors;
  * @author hao 2022/11/5 9:45
  * 缓存类
  */
-public class DBLoaderProcess {
+public class DBLoaderProcess {//一个源源不断收的map 一个与数据库保持一致的map  map1 --> 新线程入库-->再发布事件入缓存
     private final List<Map<String, Object>> titleTextList = new ArrayList<>();
     private final Map<String, TfuAlarmTitle> titleTextMap = new ConcurrentHashMap<>();
     private final Map<String, PmmpErrorResult> pmmpErrorResultMap = new ConcurrentHashMap<>();
@@ -58,17 +61,15 @@ public class DBLoaderProcess {
         List<PmmpErrorResult> list = messageDataDao.selectAlldata();
         Map<String, PmmpErrorResult> titleMap = getMapa();
         titleMap.clear();
-        titleMap.putAll(list.stream().collect(Collectors.toMap(PmmpErrorResult::getNeId, pmmpErrorResult -> pmmpErrorResult)));
+        Map<String, PmmpErrorResult> collect = list.stream().collect(Collectors.toMap(PmmpErrorResult::getTopoId, pmmpErrorResult -> pmmpErrorResult));
+        titleMap.putAll(collect);
         for (Map.Entry<String, PmmpErrorResult> stringTfuAlarmTitleEntry : titleMap.entrySet()) {
             System.err.println(stringTfuAlarmTitleEntry.getKey() + "-------" + stringTfuAlarmTitleEntry.getValue());
         }
     }
-    /**
-     * 从消息队列中获取数据添加到map缓存中
-     *
-     * @param data
-     */
-    public synchronized void pushData(HashMap<String, Object> data) {
-        titleTextList.add(data);
+    @EventListener
+    @Async
+    public void onEvent(DataChangeEvent event) {
+        init();
     }
 }

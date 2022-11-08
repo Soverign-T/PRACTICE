@@ -76,7 +76,6 @@ public class CommonConfig {
         messageDao.setJdbcTemplate(jdbcTemplate);
         return messageDao;
     }
-
     /**
      * 线程池
      * @return

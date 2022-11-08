@@ -2,6 +2,7 @@ package com.boco.alarmtitle;
 
 
 import com.boco.alarmtitle.common.cache.DBLoaderProcess;
+import com.boco.alarmtitle.common.cache.DataCache;
 import com.boco.alarmtitle.common.config.ApplicationConfig;
 import com.boco.alarmtitle.common.config.DatabaseProperties;
 import com.boco.alarmtitle.common.config.DatabaseConfiguration;
@@ -17,6 +18,7 @@ import com.boco.ucmp.client.Configuration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -25,6 +27,7 @@ import java.util.Properties;
  * @author hao 2022/10/29 11:36
  */
 @SpringBootApplication
+@EnableAsync(proxyTargetClass = true)
 public class Application {
 
     public static void main(String[] args) throws Exception {
@@ -47,7 +50,7 @@ public class Application {
         zkRegisterService.setZkNodeChangeListener(zkNodeChangeListener);
         MatcherKafkaConfig matcherKafkaConfig = receiveTopic();
         new ReceiveMessageDataListener(matcherKafkaConfig);
-        SpringContextUtils.getApplicationContext().getBean(DBLoaderProcess.class).init();
+        SpringContextUtils.getApplicationContext().getBean(DataCache.class).initData();
     }
 
     @Bean

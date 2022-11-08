@@ -42,11 +42,12 @@ public class MessageDataDaoImpl implements MessageDataDao {
         return jdbcTemplate.queryForList(SQL,params, TfuAlarmTitle.class);
     }
 
+
     @Override
     public List<PmmpErrorResult> selectAlldata() {
         String SQL = "select * from nmosdb.pmmp_error_result";
-        HashMap<String, Object> params = new HashMap<>();
-        return jdbcTemplate.queryForList(SQL, BeanPropertyRowMapper.newInstance (PmmpErrorResult.class));
+//        HashMap<String, Object> params = new HashMap<>();
+        return jdbcTemplate.query(SQL, BeanPropertyRowMapper.newInstance (PmmpErrorResult.class));
     }
 
     /**
