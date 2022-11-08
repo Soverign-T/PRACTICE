@@ -72,10 +72,10 @@ public class ReceiveMessageDataListener implements MessageListener {
                     dispMessageEntity.setEventTime(eventTime.toString());
                     //解析title_text信息
                     stringMap = dynamicMessageMap.getStringMap();
-                    System.err.println(dynamicMessageMap.getStringMap());
+                    System.err.println("你是张三吗:***********"+dynamicMessageMap.getStringMap());
                     System.err.println("----------------");
-                    System.err.println(dynamicMessageMap.getIntMap());
-                    System.err.println("----------------");
+//                    System.err.println(dynamicMessageMap.getIntMap());
+//                    System.err.println("----------------");
 
                 }
                 Assert.notEmpty(stringMap,()->{

@@ -74,11 +74,11 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <dependency>
-            <groupId>com.boco.wnms.xdpp</groupId>
-            <artifactId>com.boco.xdpp.model.alarm</artifactId>
-            <version>${xdpp.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.boco.wnms.xdpp</groupId>-->
+<!--            <artifactId>com.boco.xdpp.model.alarm</artifactId>-->
+<!--            <version>${xdpp.version}</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>xdpp-base</groupId>
             <artifactId>com.boco.xdpp.model.alarm</artifactId>
