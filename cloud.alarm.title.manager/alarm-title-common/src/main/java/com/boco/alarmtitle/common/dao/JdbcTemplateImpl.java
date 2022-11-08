@@ -10,6 +10,7 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+import javax.persistence.Table;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -130,12 +131,10 @@ public class JdbcTemplateImpl extends NamedParameterJdbcTemplate {
 
     }
 
-    public int updateEx(String sql, Map<String, Object> parm) {
+    public int updateEx(String sql, List<Map<String, Object>> parms) {
 
         List<String> sqls = new ArrayList<>();
         sqls.add(sql);
-        List<Map<String, Object>> parms = new ArrayList<>();
-        parms.add(parm);
         int[] resultArr = this.batchUpdate(sqls, parms);
         int result = resultArr != null ? resultArr[0] : -1;
         return result;

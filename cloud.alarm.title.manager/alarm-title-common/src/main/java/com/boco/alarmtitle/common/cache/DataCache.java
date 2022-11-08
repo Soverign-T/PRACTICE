@@ -9,9 +9,8 @@ import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.sql.Struct;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -21,16 +20,18 @@ import java.util.stream.Collectors;
 @Component
 public class DataCache {
 
-    private Map<String, TfuAlarmTitle> receiveMap = new ConcurrentHashMap<>();
-    private Map<String, Object> params = new ConcurrentHashMap<>();
-    private Map<String, TfuAlarmTitle> dataBaseSyncMap = new ConcurrentHashMap<>();
-    private List<TfuAlarmTitle> allData = new ArrayList<>();
+    public static Map<String, TfuAlarmTitle> receiveMap = new ConcurrentHashMap<>();
+    public static Map<String, Object> params = new ConcurrentHashMap<>();
+    public static Map<String, TfuAlarmTitle> dataBaseSyncMap = new ConcurrentHashMap<>();
     private MessageDataDao messageDataDao;
+    private static Long lastUpdateTime = 0L;
 
+    private static int a = 0;
     @Autowired
     public void setMessageDataDao(MessageDataDao messageDataDao) {
         this.messageDataDao = messageDataDao;
     }
+
 
     public Map<String, TfuAlarmTitle> getReceiveMap() {
         return receiveMap;
@@ -42,10 +43,6 @@ public class DataCache {
 
     public Map<String, TfuAlarmTitle> getDataBaseSyncMap() {
         return dataBaseSyncMap;
-    }
-
-    public List<TfuAlarmTitle> getList() {
-        return allData;
     }
 
     /**
@@ -63,6 +60,12 @@ public class DataCache {
     @EventListener
     @Async
     public void onEvent(DataChangeEvent event) {
-        initData();
+        List<TfuAlarmTitle> list = receiveMap.values().stream().filter(c -> {
+            if (c.getTimeStamp() > lastUpdateTime - 100) {
+                return true;
+            }
+            return false;
+        }).collect(Collectors.toList());
+        messageDataDao.insertBatch(list);
     }
 }

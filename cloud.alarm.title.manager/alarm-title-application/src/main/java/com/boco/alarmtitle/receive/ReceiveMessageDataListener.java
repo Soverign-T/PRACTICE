@@ -81,7 +81,7 @@ public class ReceiveMessageDataListener implements MessageListener {
                 Assert.notEmpty(stringMap,()->{
                     throw new RuntimeException(AlarmFieldConstants.TITLE_TEXT_MAP_ERROR);
                 });
-                this.messageDataManager.receive(stringMap,dispMessageEntity);
+                this.messageDataManager.receive(stringMap);
             }
         } catch (Exception e) {
             String messageContent = "";

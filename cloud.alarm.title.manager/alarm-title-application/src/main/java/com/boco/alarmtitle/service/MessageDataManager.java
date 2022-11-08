@@ -1,6 +1,8 @@
 package com.boco.alarmtitle.service;
 
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.boco.alarmtitle.common.cache.DBLoaderProcess;
 import com.boco.alarmtitle.common.cache.DataCache;
 import com.boco.alarmtitle.common.dao.MessageDataDao;
@@ -26,7 +28,7 @@ public class MessageDataManager {
     private MessageDataDao messageDataDao;
     private DBLoaderProcess dBLoaderProcess;
     private DataCache dataCache;
-
+    private static volatile int a = 0;
     @Autowired
     public void setDataCache(DataCache dataCache) {
         this.dataCache = dataCache;
@@ -55,16 +57,20 @@ public class MessageDataManager {
      *
      * @param
      */
-    public void receive(Map<String, Object> stringsMap, DispMessageEntity dispMessageEntity) {
-
-        Map<String, TfuAlarmTitle> receiveMap = dataCache.getReceiveMap();
-        List<TfuAlarmTitle> resultList= dataCache.getList();
+    public void receive(Map<String, Object> stringsMap) {
+//        String titleText = JSONObject.toJSONString(stringsMap);
+//        JSONObject jsonObject = JSONObject.parseObject(titleText);
+//        jsonObject.getObject()
         TfuAlarmTitle TfuAlarmTitle = new TfuAlarmTitle();
-        TfuAlarmTitle.setTitleId((String) stringsMap.get(""));
-        TfuAlarmTitle.setTitle((String) stringsMap.get(""));
-        resultList.add(TfuAlarmTitle);
-        Map<String, TfuAlarmTitle> collectMap = resultList.stream().collect(Collectors.toMap(com.boco.domain.TfuAlarmTitle::getTitleId, TfuAlarmTitle1 -> TfuAlarmTitle1));
-        receiveMap.putAll(collectMap);
+        TfuAlarmTitle.setTitleId((String) stringsMap.get("kk"));
+        TfuAlarmTitle.setTitle((String) stringsMap.get("k"));
+        DataCache.receiveMap.put(TfuAlarmTitle.getTitleId(), TfuAlarmTitle);
+        a++;
+        if (a > 10) {
         SpringContextUtils.getApplicationContext().publishEvent(new DataChangeEvent());
+            a = 0; //
+        }
     }
+
+
 }

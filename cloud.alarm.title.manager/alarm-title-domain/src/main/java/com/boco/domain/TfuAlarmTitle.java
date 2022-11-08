@@ -18,7 +18,7 @@ public class TfuAlarmTitle {
   private String neType;
   private String vendorAlarmId;
   private String confirmed;
-  private java.util.Date timeStamp;
+  private Long timeStamp;
 
 
   public String getTitleId() {
@@ -84,12 +84,5 @@ public class TfuAlarmTitle {
   }
 
 
-  public java.util.Date getTimeStamp() {
-    return timeStamp;
-  }
-
-  public void setTimeStamp(java.util.Date timeStamp) {
-    this.timeStamp = timeStamp;
-  }
 
 }

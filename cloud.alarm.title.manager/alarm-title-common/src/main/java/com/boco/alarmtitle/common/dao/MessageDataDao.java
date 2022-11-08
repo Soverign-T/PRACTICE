@@ -13,6 +13,6 @@ public interface MessageDataDao {
     List<TfuAlarmTitle> selectAll();
     List<PmmpErrorResult> selectAlldata();
 
-    Integer insertBatch(Map<String, Object> param);
+    Integer insertBatch(List<TfuAlarmTitle> parms);
 
 }
