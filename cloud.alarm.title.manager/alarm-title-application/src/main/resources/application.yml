@@ -1,16 +1,2 @@
-#mybatis:
-#
-#  configuration:
-#    #控制台打印日志,不可用于线上项目,线上项目需要将日志保存在日志文件中
-#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-#    map-underscore-to-camel-case: true
-
-
 server:
   port: 9527
-#spring:
-#  datasource:
-#    driver-class-name: oracle.jdbc.driver.OracleDriver
-#    username: nmosdb
-#    password: nmosoptr
-#    url: jdbc:oracle:thin:@10.10.1.170:1521/wnms
