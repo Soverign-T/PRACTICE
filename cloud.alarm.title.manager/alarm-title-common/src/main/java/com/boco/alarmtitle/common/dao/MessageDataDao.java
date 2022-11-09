@@ -11,8 +11,9 @@ import java.util.Map;
  */
 public interface MessageDataDao {
     List<TfuAlarmTitle> selectAll();
-    List<PmmpErrorResult> selectAlldata();
 
     Integer insertBatch(List<TfuAlarmTitle> parms);
+
+    Integer updateBatch(List<TfuAlarmTitle> parms);
 
 }

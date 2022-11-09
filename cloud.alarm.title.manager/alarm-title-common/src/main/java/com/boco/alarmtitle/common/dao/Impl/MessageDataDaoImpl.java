@@ -37,18 +37,10 @@ public class MessageDataDaoImpl implements MessageDataDao {
      */
     @Override
     public List<TfuAlarmTitle> selectAll() {
-
-        String SQL = "select title_id,vendor_id,title,insert_time,ne_type,vendor_alarm_id,confirmed,time_stamp from nmosdb.tfu_alarm_title";
+//title_id,vendor_id,title,insert_time,ne_type,vendor_alarm_id,confirmed,time_stamp
+        String SQL = "select title_id,vendor_id,title,ne_type,vendor_alarm_id,confirmed from nmosdb.tfu_alarm_title";
 //        HashMap<String, Object> params = new HashMap<>();
         return jdbcTemplate.query(SQL, BeanPropertyRowMapper.newInstance(TfuAlarmTitle.class));
-    }
-
-
-    @Override
-    public List<PmmpErrorResult> selectAlldata() {
-        String SQL = "select * from nmosdb.pmmp_error_result";
-//        HashMap<String, Object> params = new HashMap<>();
-        return jdbcTemplate.query(SQL, BeanPropertyRowMapper.newInstance(PmmpErrorResult.class));
     }
 
     /**
@@ -59,10 +51,9 @@ public class MessageDataDaoImpl implements MessageDataDao {
      */
     @Override
     public Integer insertBatch(List<TfuAlarmTitle> parms) {
-//        String sql = "INSERT INTO nmosdb.PMMP_ERROR_RESULT (topo_id,ne_id,ne_name,PORT_ID,PORT_NAME,PORT_TYPE,BANDWIDTH,TODAY_TIME,TODAY_IN_RATE,TODAY_OUT_RATE,YESTERDAY_TIME,YESTERDAY_IN_RATE,YESTERDAY_OUT_RATE,IN_EFFICIENCY,OUT_EFFICIENCY,IN_TONGBI,OUT_TONGBI,ALARM_REASON) VALUES \n" +
-//                "(1,1,1,1,1,1,1,sysdate,1,1,sysdate-1,1,1,1,1,1,1,1)";
+        List<String> sqls = new ArrayList<>();
         String sql = "insert into nmosdb.tfu_alarm_title (title_id,vendor_id,title,insert_time,ne_type,vendor_alarm_id,confirmed,time_stamp) " +
-                "values (:title_id,:vendor_id,:title,:insert_time,:ne_type,:vendor_alarm_id,:confirmed,:time_stamp)";
+                "values (:title_id,:vendor_id,:title,:null,:ne_type,:vendor_alarm_id,:confirmed,:null)";
         int rowNum = 0;
         try {
             List<Map<String, Object>> resultList = new ArrayList<>();
@@ -70,16 +61,45 @@ public class MessageDataDaoImpl implements MessageDataDao {
 
                 Map<String, Object> map = new HashMap<>();
                 map.put("title_id", tfuAlarmTitle.getTitleId());
-//                map.put("vendor_id", param.get(""));
-//                map.put("title", param.get(""));
-//                map.put("insert_time", param.get(""));
-//                map.put("ne_type", param.get(""));
-//                map.put("vendor_alarm_id", param.get(""));
-//                map.put("confirmed", param.get(""));
-//                map.put("time_stamp", param.get(""));
+                map.put("vendor_id", tfuAlarmTitle.getVendorId());
+                map.put("title", tfuAlarmTitle.getTitle());
+//                map.put("insert_time", tfuAlarmTitle.getTitleId());
+                map.put("ne_type", tfuAlarmTitle.getNeType());
+                map.put("vendor_alarm_id", tfuAlarmTitle.getVendorAlarmId());
+                map.put("confirmed", tfuAlarmTitle.getConfirmed());
+//                map.put("time_stamp", tfuAlarmTitle.getTitleId());
                 resultList.add(map);
+                sqls.add(sql);
             }
-            rowNum = jdbcTemplate.updateEx(sql, resultList);
+            rowNum = jdbcTemplate.updateEx(sqls, resultList);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return rowNum;
+    }
+
+    @Override
+    public Integer updateBatch(List<TfuAlarmTitle> params) {
+        List<String> sqls = new ArrayList<>();
+        String sql = "update nmosdb.tfu_alarm_title set title=:title";
+        int rowNum = 0;
+        try {
+            List<Map<String, Object>> resultList = new ArrayList<>();
+            for (TfuAlarmTitle tfuAlarmTitle: params) {
+
+                Map<String, Object> map = new HashMap<>();
+//                map.put("title_id", tfuAlarmTitle.getTitleId());
+//                map.put("vendor_id", tfuAlarmTitle.getVendorId());
+                map.put("title", "测试测试1111111111111111111111");
+////                map.put("insert_time", tfuAlarmTitle.getTitleId());
+//                map.put("ne_type", tfuAlarmTitle.getNeType());
+//                map.put("vendor_alarm_id", tfuAlarmTitle.getVendorAlarmId());
+//                map.put("confirmed", tfuAlarmTitle.getConfirmed());
+////                map.put("time_stamp", tfuAlarmTitle.getTitleId());
+                resultList.add(map);
+                sqls.add(sql);
+            }
+            rowNum = jdbcTemplate.updateEx(sqls, resultList);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

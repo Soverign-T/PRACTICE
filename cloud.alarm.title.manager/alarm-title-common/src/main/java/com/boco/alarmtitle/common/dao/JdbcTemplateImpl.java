@@ -131,10 +131,10 @@ public class JdbcTemplateImpl extends NamedParameterJdbcTemplate {
 
     }
 
-    public int updateEx(String sql, List<Map<String, Object>> parms) {
+    public int updateEx(List<String> sqls, List<Map<String, Object>> parms) {
 
-        List<String> sqls = new ArrayList<>();
-        sqls.add(sql);
+//        List<String> sqls = new ArrayList<>();
+//        sqls.add(sql);
         int[] resultArr = this.batchUpdate(sqls, parms);
         int result = resultArr != null ? resultArr[0] : -1;
         return result;

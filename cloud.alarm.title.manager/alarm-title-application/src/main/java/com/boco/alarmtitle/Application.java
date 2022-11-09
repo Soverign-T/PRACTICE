@@ -1,8 +1,6 @@
 package com.boco.alarmtitle;
 
 
-import com.boco.alarmtitle.common.cache.DBLoaderProcess;
-import com.boco.alarmtitle.common.cache.DataCache;
 import com.boco.alarmtitle.common.config.ApplicationConfig;
 import com.boco.alarmtitle.common.config.DatabaseProperties;
 import com.boco.alarmtitle.common.config.DatabaseConfiguration;
@@ -50,7 +48,6 @@ public class Application {
         zkRegisterService.setZkNodeChangeListener(zkNodeChangeListener);
         MatcherKafkaConfig matcherKafkaConfig = receiveTopic();
         new ReceiveMessageDataListener(matcherKafkaConfig);
-        SpringContextUtils.getApplicationContext().getBean(DataCache.class).initData();
     }
 
     @Bean
@@ -64,9 +61,6 @@ public class Application {
         return databaseProperties.init(databaseProperties);
     }
     @Bean
-    public DBLoaderProcess titleTextCache() {
-        return new DBLoaderProcess();
-    }
     public static ZkNodeChangeListener initSystemConfig() throws Exception {
         Configuration configuration = ConfigurationHelper.getUcmpConf();
         Properties properties = configuration.getProperties("system");
@@ -99,15 +93,6 @@ public class Application {
             config.setReceiveThreadSize(1);
         }
         return config;
-        /*MatcherKafkaConfig config = new MatcherKafkaConfig();
-        config.setGroupId("test");
-        config.setTopicName("MAT_AGENT.Q");
-        config.setZookeeperConnect("10.10.2.22:2182,10.10.2.23;2182,10.10.2.24:2182");
-        config.setZookeeperPath("/test");
-        config.setClientName("zhangsan");
-        config.setBootstrapServers("10.10.2.42:10823,10.10.2.41:10784,10.10.2.24:10745,10.10.2.172:10706");
-        config.setReceiveThreadSize(1);
-        return config;*/
     }
 
 }
