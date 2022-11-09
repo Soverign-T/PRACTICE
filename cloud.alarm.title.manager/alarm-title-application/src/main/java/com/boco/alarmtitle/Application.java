@@ -3,18 +3,20 @@ package com.boco.alarmtitle;
 
 import com.boco.alarmtitle.common.config.ApplicationConfig;
 import com.boco.alarmtitle.common.config.DatabaseProperties;
-import com.boco.alarmtitle.common.config.NmosdbConfig;
+import com.boco.alarmtitle.common.config.DatabaseConfiguration;
 import com.boco.alarmtitle.common.config.UCMPConfigFactory;
 import com.boco.alarmtitle.common.util.SpringContextUtils;
-import com.boco.alarmtitle.receive.ReceiveMessageListener;
+import com.boco.alarmtitle.kafka.parse.AlarmDescLoader;
+import com.boco.alarmtitle.receive.ReceiveMessageDataListener;
 import com.boco.alarmtitle.zk.ZKRegisterService;
 import com.boco.alarmtitle.zk.ZkNodeChangeListener;
-import com.boco.domain.MatcherKafkaConfig;
+import com.boco.alarmtitle.kafka.MatcherKafkaConfig;
 import com.boco.gutil.registry.client.util.ConfigurationHelper;
 import com.boco.ucmp.client.Configuration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -23,7 +25,7 @@ import java.util.Properties;
  * @author hao 2022/10/29 11:36
  */
 @SpringBootApplication
-//@MapperScan("com.boco.alarmtitle")
+@EnableAsync(proxyTargetClass = true)
 public class Application {
 
     public static void main(String[] args) throws Exception {
@@ -38,12 +40,15 @@ public class Application {
         }
         ApplicationConfig.serverPort = serverPort;
         System.setProperty("server.port", serverPort);
-        NmosdbConfig.initNmosdb();
+        DatabaseConfiguration.initNmosdb();
+        //初始化PB
+        AlarmDescLoader.loadAlarmObjectMapping();
         SpringApplication.run(Application.class, args);
         ZKRegisterService zkRegisterService = ZKRegisterService.newInstance();
         zkRegisterService.setZkNodeChangeListener(zkNodeChangeListener);
+        MatcherKafkaConfig matcherKafkaConfig = receiveTopic();
+        new ReceiveMessageDataListener(matcherKafkaConfig);
     }
-
 
     @Bean
     public SpringContextUtils initApplicationContext() {
@@ -55,7 +60,7 @@ public class Application {
         DatabaseProperties databaseProperties = new DatabaseProperties();
         return databaseProperties.init(databaseProperties);
     }
-
+    @Bean
     public static ZkNodeChangeListener initSystemConfig() throws Exception {
         Configuration configuration = ConfigurationHelper.getUcmpConf();
         Properties properties = configuration.getProperties("system");
@@ -66,17 +71,28 @@ public class Application {
         return zkNodeChangeListener;
     }
 
-    private static MatcherKafkaConfig receiveTopic() {
+    private static MatcherKafkaConfig receiveTopic() throws IOException {
+        Configuration configuration = ConfigurationHelper.getUcmpConf();
+        Properties properties = configuration.getProperties("inputTopic");
+        String groupId = properties.getProperty("group.id");
+        String topicName = properties.getProperty("topic.name");
+        String zookeeperConnect = properties.getProperty("zookeeper.connect");
+        String zookeeperPath = properties.getProperty("zookeeper.path");
+        String clientName = properties.getProperty("client.name");
+        String kafkaBrokers = properties.getProperty("kafka.brokers");
+        String receiveThreadSize = properties.getProperty("receive.thread.size");
+
         MatcherKafkaConfig config = new MatcherKafkaConfig();
-        config.setGroupId("test");
-        config.setTopicName("MAT_AGENT.Q");
-        config.setZookeeperConnect("10.10.2.22:2182,10.10.2.23;2182,10.10.2.24:2182");
-        config.setZookeeperPath("/test");
-        config.setClientName("zhangsan");
-        config.setBootstrapServers("10.10.2.42:10823,10.10.2.41:10784,10.10.2.24:10745,10.10.2.172:10706");
-        config.setReceiveThreadSize(1);
+        config.setGroupId(groupId);
+        config.setTopicName(topicName);
+        config.setZookeeperConnect(zookeeperConnect);
+        config.setZookeeperPath(zookeeperPath);
+        config.setClientName(clientName);
+        config.setBootstrapServers(kafkaBrokers);
+        if (receiveThreadSize != null && !receiveThreadSize.isEmpty()){
+            config.setReceiveThreadSize(1);
+        }
         return config;
     }
-
 
 }

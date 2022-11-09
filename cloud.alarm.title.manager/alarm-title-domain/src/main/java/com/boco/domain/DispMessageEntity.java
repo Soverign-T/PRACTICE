@@ -4,11 +4,11 @@ import com.boco.kafka.message.MessageHeader;
 import com.boco.xdpp.bean.exports.proto.ProtoRealTimeMessage;
 import com.boco.xdpp.model.alarm.exports.beans.AlarmCFP;
 import com.boco.xdpp.model.alarm.exports.beans.AlarmFP;
+import lombok.ToString;
 
-import java.text.SimpleDateFormat;
-
+@ToString
 public class DispMessageEntity {
-    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    //private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private MessageHeader header;
     private ProtoRealTimeMessage.ProtoRealTimeMessageEntry protoRealTimeMessageEntry;
     private String eventTime;
@@ -64,16 +64,5 @@ public class DispMessageEntity {
         this.activeStatus = activeStatus;
     }
 
-    @Override
-    public String toString() {
-        return "DispMessageEntity{" +
-                "sdf=" + sdf +
-                ", header=" + header +
-                ", protoRealTimeMessageEntry=" + protoRealTimeMessageEntry +
-                ", eventTime='" + eventTime + '\'' +
-                ", alarmFP=" + alarmFP +
-                ", alarmCFP=" + alarmCFP +
-                ", activeStatus='" + activeStatus + '\'' +
-                '}';
-    }
+
 }

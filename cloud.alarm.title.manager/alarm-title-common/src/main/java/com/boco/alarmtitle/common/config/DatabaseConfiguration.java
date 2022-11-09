@@ -11,8 +11,8 @@ import java.util.Properties;
 /**
  * @author hao 2022/10/31 15:38
  */
-public class NmosdbConfig {
-    private static Logger logger = LoggerFactory.getLogger(NmosdbConfig.class);
+public class DatabaseConfiguration {
+    //private static Logger logger = LoggerFactory.getLogger(DatabaseConfiguration.class);
     public static String dbUser;
     public static String dbPassword;
     public static String dbDriver;
@@ -32,31 +32,34 @@ public class NmosdbConfig {
         String prototypeCount = nmosdbProperties.getProperty("jdbc-3.proxool.prototype-count");
         String maxConnCount = nmosdbProperties.getProperty("jdbc-3.proxool.maximum-connection-count");
         String queryTimeOutSeconds = nmosdbProperties.getProperty("jdbc-3.proxool.maximum-query-timeout-seconds");
-        NmosdbConfig.dbUrl = url;
-        NmosdbConfig.dbDriver = driver;
-        NmosdbConfig.dbUser = user;
-        NmosdbConfig.dbPassword = password;
+        DatabaseConfiguration.dbUrl = url;
+        DatabaseConfiguration.dbDriver = driver;
+        DatabaseConfiguration.dbUser = user;
+        DatabaseConfiguration.dbPassword = password;
         try {
             if (prototypeCount != null && !prototypeCount.isEmpty()){
-                NmosdbConfig.prototypeCount = Integer.parseInt(prototypeCount);
+                DatabaseConfiguration.prototypeCount = Integer.parseInt(prototypeCount);
             }
         }catch (Exception e){
-            logger.error("jdbc-1.proxool.prototype-count is err number");
+            //logger.error("jdbc-1.proxool.prototype-count is err number");
+            throw new RuntimeException("jdbc-1.proxool.prototype-count is err number");
         }
         try {
             if (maxConnCount != null && !maxConnCount.isEmpty()){
-                NmosdbConfig.maxConnCount = Integer.parseInt(maxConnCount);
+                DatabaseConfiguration.maxConnCount = Integer.parseInt(maxConnCount);
             }
         }catch (Exception e){
-            logger.error("jdbc-1.proxool.maximum-connection-count is err number");
+            //logger.error("jdbc-1.proxool.maximum-connection-count is err number");
+            throw new RuntimeException("jdbc-1.proxool.maximum-connection-count is err number");
         }
 
         try {
             if (queryTimeOutSeconds != null && !"".equals(queryTimeOutSeconds)){
-                NmosdbConfig.queryTimeOutSeconds = Integer.parseInt(queryTimeOutSeconds);
+                DatabaseConfiguration.queryTimeOutSeconds = Integer.parseInt(queryTimeOutSeconds);
             }
         }catch (Exception e){
-            logger.error("jdbc-1.proxool.maximum-query-timeout-seconds is err number");
+            //logger.error("jdbc-1.proxool.maximum-query-timeout-seconds is err number");
+            throw new RuntimeException("jdbc-1.proxool.maximum-query-timeout-seconds is err number");
         }
     }
 }

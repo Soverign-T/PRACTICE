@@ -1,12 +1,16 @@
 package com.boco.alarmtitle.common.dao;
 
+import com.boco.domain.PmmpErrorResult;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+import javax.persistence.Table;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -17,6 +21,7 @@ import java.util.Map;
 /**
  * @author hao 2022/10/31 16:51
  */
+
 public class JdbcTemplateImpl extends NamedParameterJdbcTemplate {
     private PlatformTransactionManager platformTransactionManager;
     private DefaultTransactionDefinition transactionDefinition;
@@ -126,12 +131,10 @@ public class JdbcTemplateImpl extends NamedParameterJdbcTemplate {
 
     }
 
-    public int updateEx(String sql, Map<String, Object> parm) {
+    public int updateEx(List<String> sqls, List<Map<String, Object>> parms) {
 
-        List<String> sqls = new ArrayList<>();
-        sqls.add(sql);
-        List<Map<String, Object>> parms = new ArrayList<>();
-        parms.add(parm);
+//        List<String> sqls = new ArrayList<>();
+//        sqls.add(sql);
         int[] resultArr = this.batchUpdate(sqls, parms);
         int result = resultArr != null ? resultArr[0] : -1;
         return result;

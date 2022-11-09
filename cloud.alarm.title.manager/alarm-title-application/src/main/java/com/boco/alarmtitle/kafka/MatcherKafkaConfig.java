@@ -1,4 +1,4 @@
-package com.boco.domain;
+package com.boco.alarmtitle.kafka;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,8 +7,6 @@ import org.slf4j.LoggerFactory;
  * @author hao 2022/10/29 15:08
  */
 public class MatcherKafkaConfig {
-    private static final Logger logger = LoggerFactory.getLogger(MatcherKafkaConfig.class);
-
 
     private String subScription;
     private String moduleIdList;
@@ -24,10 +22,6 @@ public class MatcherKafkaConfig {
     private Integer receiveThreadSize = 3;
 
     private String filter;
-
-    public static Logger getLogger() {
-        return logger;
-    }
 
     public String getSubScription() {
         return subScription;
@@ -151,25 +145,4 @@ public class MatcherKafkaConfig {
                 ", filter='" + filter + '\'' +
                 '}';
     }
-
-    //    /**
-//     * 解析filterid
-//     * @return
-//     */
-//    public List<Integer> getFilterList() {
-//        List<Integer> filterList = new ArrayList<Integer>();
-//        if(this.filter != null && this.filter.length() > 0) {
-//            String[] filterIds = filter.split(",");
-//            for(String fid: filterIds) {
-//                try {
-//                    int filterId = Integer.parseInt(fid);
-//                    filterList.add(filterId);
-//                } catch(Exception e) {
-//                    logger.error("解析过滤器列表错误:filter_id={}", fid);
-//                }
-//            }
-//        }
-//        logger.info("设置过滤器列表:{},传入过滤器参数:{}", filterList, filter);
-//        return filterList;
-//    }
 }
