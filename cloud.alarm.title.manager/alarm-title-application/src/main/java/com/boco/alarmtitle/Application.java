@@ -49,7 +49,7 @@ public class Application {
         MatcherKafkaConfig matcherKafkaConfig = receiveTopic();
         new ReceiveMessageDataListener(matcherKafkaConfig);
     }
-
+    zhangsan
     @Bean
     public SpringContextUtils initApplicationContext() {
         return new SpringContextUtils();
